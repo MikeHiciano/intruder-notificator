@@ -6,7 +6,7 @@ topic = "sum_topic"
 
 
 def on_message(client,userdata,message):
-    print(topic ," = ", str(message.payload.decode("utf-8")))
+    print(topic ,"=", str(message.payload.decode("utf-8")))
 
 if __name__ == "__main__":
     try:
