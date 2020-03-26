@@ -2,7 +2,7 @@ import paho.mqtt.client as mqtt
 
 broker_address = "test.mosquitto.org"
 broker_port = 1883
-topic = "sum_topic"
+topic = "" # put the topic of your choice
 
 
 def on_message(client,userdata,message):

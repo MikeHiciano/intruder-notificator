@@ -2,7 +2,7 @@ import paho.mqtt.publish as publish
 import sys
 
 broker_address = "test.mosquitto.org"
-topic = "sum_topic"
+topic = "" ## put the topic of your choice
 
 def publisher(message):
     publish.single(topic,message,hostname=broker_address)
