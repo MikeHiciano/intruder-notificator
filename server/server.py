@@ -2,7 +2,6 @@ import paho.mqtt.client as mqtt
 import telepot
 from telepot.loop import MessageLoop
 import os
-import threading
 
 
 #this part of the code is affected for the variables.sh script
@@ -30,7 +29,7 @@ def subscriber(client,userdata,message):
     print(topic,"=",str(message.payload.decode("utf-8")))
     bot.sendMessage(chat_id,message.payload.decode("utf-8"))
 
-def mqtt_thread():
+def mqtt_main():
 
     client = mqtt.Client()
     client.on_message = subscriber
@@ -38,16 +37,15 @@ def mqtt_thread():
     client.subscribe(topic,0)
     client.loop_forever()
     
-def telepot_thread():
+def telepot_main():
     MessageLoop(bot,handle).run_as_thread()
 
 if __name__ == "__main__":
-    comm = threading.Thread(target=mqtt_thread)
-    message = threading.Thread(target=telepot_thread)
+
     print("Starting mqtt server ...")
     try:
-        comm.start()
-        message.start()
+        mqtt_main()
+        telepot_main()
 
     except KeyboardInterrupt:
         print("Bye ;)")
