@@ -4,6 +4,8 @@ from telepot.loop import MessageLoop
 import os
 import threading
 
+
+#this part of the code is affected for the variables.sh script
 broker_address = os.environ['BROKER_ADDRESS']
 broker_port = int(os.environ['BROKER_PORT'])
 topic = os.environ['MQTT_TOPIC']
@@ -11,8 +13,11 @@ topic = os.environ['MQTT_TOPIC']
 bot_api_key = os.environ['BOT_API_KEY']
 chat_id = int(os.environ['CHAT_ID'])
 
+# ------------------------- end ------------------------------#
+
 bot = telepot.Bot(bot_api_key)
 
+#TELEGRAM BOT FUNCTION
 def handle(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
     print(content_type,chat_type, chat_id)
@@ -20,6 +25,7 @@ def handle(msg):
     if content_type == 'text':
         bot.sendMessage(chat_id,msg['text'])
 
+#MQTT SUBSCRIBER FUNCTION
 def subscriber(client,userdata,message):
     print(topic,"=",str(message.payload.decode("utf-8")))
     bot.sendMessage(chat_id,message.payload.decode("utf-8"))

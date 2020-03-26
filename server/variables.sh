@@ -13,4 +13,5 @@ TELEGRAM_CHAT_ID=""
 GREEN="\033[0;32m"
 NC="\033[0m"
 
+#PRINT DONE
 echo -e "${GREEN}Done${NC} ;)"
