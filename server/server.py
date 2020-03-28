@@ -1,4 +1,4 @@
-import paho.mqtt.client as mqtt
+iport paho.mqtt.client as mqtt
 import telepot
 from telepot.loop import MessageLoop
 import os
@@ -10,7 +10,7 @@ broker_port = int(os.environ['BROKER_PORT'])
 topic = os.environ['MQTT_TOPIC']
 
 bot_api_key = os.environ['BOT_API_KEY']
-chat_id = int(os.environ['CHAT_ID'])
+chat_id = int(os.environ['TELEGRAM_CHAT_ID'])
 
 # ------------------------- end ------------------------------#
 
@@ -36,7 +36,7 @@ def mqtt_main():
     client.connect(broker_address,broker_port,60)
     client.subscribe(topic,0)
     client.loop_forever()
-    
+
 def telepot_main():
     MessageLoop(bot,handle).run_as_thread()
 
