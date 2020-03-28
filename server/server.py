@@ -1,4 +1,4 @@
-iport paho.mqtt.client as mqtt
+import paho.mqtt.client as mqtt
 import telepot
 from telepot.loop import MessageLoop
 import os
