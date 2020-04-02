@@ -17,4 +17,4 @@ if __name__ == "__main__":
         client.loop_forever()
 
     except KeyboardInterrupt:
-        print("BYE ;)") 
+        print("BYE ;)")
