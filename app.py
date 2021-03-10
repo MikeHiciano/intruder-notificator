@@ -33,7 +33,7 @@ def echo(update, context):
         publish.single(topic,"bruh", hostname=broker_address,client_id='someone')
         update.message.reply_text("turning led ON")
     
-    else if update.message.text == "OFF":
+    elif update.message.text == "OFF":
         publish.single(topic,"something", hostname=broker_address, client_id='someone')
         update.message.reply_text("turning led OFF")
 
