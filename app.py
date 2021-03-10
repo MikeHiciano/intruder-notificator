@@ -39,7 +39,7 @@ def main():
     updater.start_webhook(listen="0.0.0.0",
                           port=int(PORT),
                           url_path=TOKEN)
-    updater.bot.setWebhook('https://intruder-notificator-test.herokuapp.com/bot' + TOKEN)
+    updater.bot.setWebhook('https://intruder-notificator-test.herokuapp.com/' + TOKEN)
     updater.idle()
 
 if __name__ == '__main__':
