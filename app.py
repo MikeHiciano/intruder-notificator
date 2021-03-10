@@ -3,8 +3,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import os
 
 TOKEN = os.environ.get('TOKEN')
-chat_id = int(os.environ.get('CHAT_ID'))
-PORT = int(os.environ.get('PORT', 5000))
+PORT = int(os.environ.get('PORT', '8443'))
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -40,7 +39,7 @@ def main():
     updater.start_webhook(listen="0.0.0.0",
                           port=int(PORT),
                           url_path=TOKEN)
-    updater.bot.setWebhook('https://intruder-notificator-test.herokuapp.com/' + TOKEN)
+    updater.bot.setWebhook('https://intruder-notificator-test.herokuapp.com/bot' + TOKEN)
     updater.idle()
 
 if __name__ == '__main__':
