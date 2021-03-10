@@ -1,9 +1,13 @@
 import logging
+import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+import paho.mqtt.publish as publish
 import os
 
 TOKEN = os.environ.get('TOKEN')
 PORT = int(os.environ.get('PORT', '8443'))
+broker_address = os.environ.get('MQTT_ADDRESS')
+topic = os.environ.get('TOPIC')
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -12,8 +16,12 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 def start(update, context):
-    """Send a message when the command /start is issued."""
-    update.message.reply_text('Hi!')
+    kb = [[telegram.KeyboardButton('ON')],
+          [telegram.KeyboardButton('OFF')]]
+    kb_markup = telegram.ReplyKeyboardMarkup(kb)
+    updater.bot.sendMessage(chat_id=update.message.chat_id,
+                    text="choose one: "
+                    reply_markup=kb_markup)
 
 def help(update, context):
     """Send a message when the command /help is issued."""
@@ -21,7 +29,14 @@ def help(update, context):
 
 def echo(update, context):
     """Echo the user message."""
-    update.message.reply_text(update.message.text)
+    if update.message.text == "ON":
+        publish.single(topic,"bruh", hostname=broker_address,client_id='someone')
+        update.message.reply_text("turning led ON")
+    
+    else if update.message.text == "OFF":
+        publish.single(topic,"something", hostname=broker_address, client_id='someone')
+        update.message.reply_text("turning led OFF")
+
 
 def error(update, context):
     """Log Errors caused by Updates."""
