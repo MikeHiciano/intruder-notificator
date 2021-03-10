@@ -20,7 +20,7 @@ def start(update, context):
           [telegram.KeyboardButton('OFF')]]
     kb_markup = telegram.ReplyKeyboardMarkup(kb)
     updater.bot.sendMessage(chat_id=update.message.chat_id,
-                    text="choose one: "
+                    text="choose one: ",
                     reply_markup=kb_markup)
 
 def help(update, context):
