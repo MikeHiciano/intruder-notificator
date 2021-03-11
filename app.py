@@ -5,6 +5,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import paho.mqtt.publish as publish
 import paho.mqtt.client as mqtt
 import os
+import time
 
 TOKEN = os.environ.get('TOKEN')
 PORT = int(os.environ.get('PORT', '8443'))
@@ -78,7 +79,6 @@ def bot_main():
     updater.idle()
 
 if __name__ == '__main__':
-    bot_thread = threading.Thread(target=bot_main)
+    bot_main()
     mqtt_thread = threading.Thread(target=mqtt_main)
-    bot_thread.start()
     mqtt_thread.start()
