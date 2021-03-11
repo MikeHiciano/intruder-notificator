@@ -1,21 +1,29 @@
-from umqtt.simple import MQTTClient
-import machine
 import time
+from machine import Pin
+from umqtt.robust import MQTTClient
 
-server = b"test.mosquitto.org"
-topic = b"" #put the same topic of your mqtt broker server
-p1 = machine.Pin(5,machine.Pin.IN)
-led = machine.Pin(16,machine.Pin.OUT)
+led = Pin(5,Pin.OUT)
+button = Pin(4,Pin.IN,Pin.PULL_UP)
 
-def main(server,topic):
-    c = MQTTClient(b"someone",server)
-    c.connect()
-    c.publish(topic,b"hello")
-    c.disconnect()
+def sub_cb(topic, msg):
+    if msg == b'bruh':
+        led.value(1)
+    else:
+        led.value(0)
 
+c = MQTTClient("umqtt_client", "test.mosquitto.org")
+c.connect()
+c.DEBUG = True
+c.set_callback(sub_cb)
+
+if not c.connect(clean_session=False):
+    print("New session being set up")
+    c.subscribe(b"sum_topic")
+
+button.irq(trigger=Pin.IRQ_FALLING, handler= lambda t: c.publish(b'sum_alarm','trigger'))
 while True:
-    if p1.value() == True:
-        led.off()
-        main(server,topic)
-        time.sleep(5)
-        led.on()
+    # c.publish(b'sum_alarm','trigger')
+    # time.sleep(30)
+    c.wait_msg()  
+
+c.disconnect()
