@@ -22,8 +22,6 @@ if not c.connect(clean_session=False):
 
 button.irq(trigger=Pin.IRQ_FALLING, handler= lambda t: c.publish(b'sum_alarm','trigger'))
 while True:
-    # c.publish(b'sum_alarm','trigger')
-    # time.sleep(30)
     c.wait_msg()  
 
 c.disconnect()
