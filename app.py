@@ -79,6 +79,7 @@ def bot_main():
     updater.idle()
 
 if __name__ == '__main__':
-    bot_main()
     mqtt_thread = threading.Thread(target=mqtt_main)
     mqtt_thread.start()
+    bot_main()
+    
