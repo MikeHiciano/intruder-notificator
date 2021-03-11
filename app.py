@@ -62,7 +62,7 @@ def mqtt_main():
     client = mqtt.Client()
     client.on_message = mqtt_subscriber
     client.connect(broker_address,broker_port,60)
-    client.subscribe(second_topic,0)
+    client.subscribe(subscriber_topic,0)
     client.loop_start()
 
 def bot_main():
