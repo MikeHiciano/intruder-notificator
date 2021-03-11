@@ -1,13 +1,18 @@
 import logging
+import threading
 import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import paho.mqtt.publish as publish
+import paho.mqtt.client as mqtt
 import os
 
 TOKEN = os.environ.get('TOKEN')
 PORT = int(os.environ.get('PORT', '8443'))
 broker_address = os.environ.get('MQTT_ADDRESS')
+broker_port = os.environ.get('MQTT_PORT')
 topic = os.environ.get('TOPIC')
+subscriber_topic = os.environ.get('SUBSCRIBER_TOPIC')
+chat_id_p = os.environ.get('CHAT_ID')
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -32,17 +37,32 @@ def echo(update, context):
     if update.message.text == "ON":
         publish.single(topic,"bruh", hostname=broker_address,client_id='someone')
         update.message.reply_text("turning led ON")
+        time.sleep(5)
     
     elif update.message.text == "OFF":
         publish.single(topic,"something", hostname=broker_address, client_id='someone')
         update.message.reply_text("turning led OFF")
-
+        time.sleep(5)
 
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
-def main():
+def mqtt_subscriber(client,userdata,message):
+    bot = telegram.Bot(TOKEN)
+
+    if str(message.payload.decode("utf-8")) == "trigger":
+        bot.send_message(chat_id=chat_id_p,
+                         text="Message From: %s\nMessage: Alarm Thriggered" %(message.topic))        
+
+def mqtt_main():
+    client = mqtt.Client()
+    client.on_message = mqtt_subscriber
+    client.connect(broker_address,broker_port,60)
+    client.subscribe(second_topic,0)
+    client.loop_forever()
+
+def bot_main():
     """Start the bot."""
     updater = Updater(TOKEN, use_context=True)
     dp = updater.dispatcher
@@ -58,4 +78,7 @@ def main():
     updater.idle()
 
 if __name__ == '__main__':
-    main()
+    bot_thread = threading.Thread(target=bot_main)
+    mqtt_thread = threading.Thread(target=mqtt_main)
+    bot_thread.start()
+    mqtt_thread.start()
