@@ -10,7 +10,7 @@ import time
 TOKEN = os.environ.get('TOKEN')
 PORT = int(os.environ.get('PORT', '8443'))
 broker_address = os.environ.get('MQTT_ADDRESS')
-broker_port = os.environ.get('MQTT_PORT')
+broker_port = int(os.environ.get('MQTT_PORT'))
 topic = os.environ.get('TOPIC')
 subscriber_topic = os.environ.get('SUBSCRIBER_TOPIC')
 chat_id_p = os.environ.get('CHAT_ID')
