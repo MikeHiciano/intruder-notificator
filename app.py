@@ -33,6 +33,9 @@ def help(update, context):
     """Send a message when the command /help is issued."""
     update.message.reply_text('Help!')
 
+def tel_id(update, context):
+    update.message.reply_text("Your Telegram Chat ID is: \n%s" %(update.message.chat_id))
+
 def echo(update, context):
     """Echo the user message."""
     if update.message.text == "ON":
@@ -53,15 +56,14 @@ def mqtt_subscriber(client,userdata,message):
     bot = telegram.Bot(TOKEN)
 
     if str(message.payload.decode("utf-8")) == "trigger":
-        bot.send_message(chat_id=chat_id_p,
-                         text="Message From: %s\nMessage: Alarm Thriggered" %(message.topic))        
+        bot.send_message(chat_id=chat_id_p,text="Message From: %s\nMessage: Alarm Thriggered" %(message.topic))        
 
 def mqtt_main():
     client = mqtt.Client()
     client.on_message = mqtt_subscriber
     client.connect(broker_address,broker_port,60)
     client.subscribe(second_topic,0)
-    client.loop_forever()
+    client.loop_start()
 
 def bot_main():
     """Start the bot."""
@@ -69,6 +71,7 @@ def bot_main():
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("chatid", tel_id))
     dp.add_handler(MessageHandler(Filters.text, echo))
     dp.add_error_handler(error)
 
@@ -79,7 +82,6 @@ def bot_main():
     updater.idle()
 
 if __name__ == '__main__':
-    mqtt_thread = threading.Thread(target=mqtt_main)
-    mqtt_thread.start()
+    mqtt_main()
     bot_main()
     
