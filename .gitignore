@@ -1,0 +1,4 @@
+env/
+credenciales.txt
+.pyc
+*.pem
