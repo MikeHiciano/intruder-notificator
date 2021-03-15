@@ -39,14 +39,24 @@ def tel_id(update, context):
 def echo(update, context):
     """Echo the user message."""
     if update.message.text == "ON":
-        publish.single(topic,"bruh", hostname=broker_address,client_id='someone')
+        publish.single(topic,"on", hostname=broker_address,client_id='someone')
         update.message.reply_text("turning led ON")
-        time.sleep(5)
+        time.sleep(2)
     
     elif update.message.text == "OFF":
-        publish.single(topic,"something", hostname=broker_address, client_id='someone')
+        publish.single(topic,"off", hostname=broker_address, client_id='someone')
         update.message.reply_text("turning led OFF")
-        time.sleep(5)
+        time.sleep(2)
+
+def activate_alarm():
+    publish.single(topic,"activate", hostname=broker_address, client_id='someone')
+    update.message.reply_text("Alarm Armed")
+    time.sleep(2)
+
+def deactivate_alarm():
+    publish.single(topic,"deactivate", hostname=broker_address, client_id='someone')
+    update.message.reply_text("Alarm Disarmed")
+    time.sleep(2)
 
 def error(update, context):
     """Log Errors caused by Updates."""
@@ -72,6 +82,8 @@ def bot_main():
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("chatid", tel_id))
+    dp.add_handler(CommandHandler("activate",activate_alarm))
+    dp.add_handler(CommandHandler("deactivate",deactivate_alarm))
     dp.add_handler(MessageHandler(Filters.text, echo))
     dp.add_error_handler(error)
 
