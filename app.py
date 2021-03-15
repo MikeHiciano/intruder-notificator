@@ -48,12 +48,12 @@ def echo(update, context):
         update.message.reply_text("turning led OFF")
         time.sleep(2)
 
-def activate_alarm():
+def activate_alarm(update, context):
     publish.single(topic,"activate", hostname=broker_address, client_id='someone')
     update.message.reply_text("Alarm Armed")
     time.sleep(2)
 
-def deactivate_alarm():
+def deactivate_alarm(update, context):
     publish.single(topic,"deactivate", hostname=broker_address, client_id='someone')
     update.message.reply_text("Alarm Disarmed")
     time.sleep(2)
