@@ -2,14 +2,19 @@ import time
 from machine import Pin
 from umqtt.robust import MQTTClient
 
-led = Pin(5,Pin.OUT)
-button = Pin(4,Pin.IN,Pin.PULL_UP)
+led = Pin(13,Pin.OUT)
+button = Pin(12,Pin.IN)
+SECURED_ALARM = False
 
 def sub_cb(topic, msg):
     if msg == b'bruh':
         led.value(1)
-    else:
+    elif msg == b'off':
         led.value(0)
+    elif msg == b'activate':
+        SECURED_ALARM == True
+    elif msg == b'deactivate':
+        SECURED_ALARM == False
 
 c = MQTTClient("umqtt_client", "test.mosquitto.org")
 c.connect()
@@ -20,7 +25,16 @@ if not c.connect(clean_session=False):
     print("New session being set up")
     c.subscribe(b"sum_topic")
 
-button.irq(trigger=Pin.IRQ_FALLING, handler= lambda t: c.publish(b'sum_alarm','trigger'))
+def publish():
+    if SECURED_ALARM:
+        c.publish(b'sum_alarm','trigger')
+        time.sleep(10)
+    elif SECURED_ALARM == False:
+        pass
+    
+    return True
+
+button.irq(trigger=Pin.IRQ_RISING, handler= lambda t: publish())
 while True:
     c.wait_msg()  
 
