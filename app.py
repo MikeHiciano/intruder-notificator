@@ -1,5 +1,4 @@
 import logging
-import threading
 import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import paho.mqtt.publish as publish
@@ -9,6 +8,7 @@ import time
 
 TOKEN = os.environ.get('TOKEN')
 PORT = int(os.environ.get('PORT', '8443'))
+URL = os.environ.get('URL')
 broker_address = os.environ.get('MQTT_ADDRESS')
 broker_port = int(os.environ.get('MQTT_PORT'))
 topic = os.environ.get('TOPIC')
@@ -90,7 +90,7 @@ def bot_main():
     updater.start_webhook(listen="0.0.0.0",
                           port=int(PORT),
                           url_path=TOKEN)
-    updater.bot.setWebhook('https://intruder-notificator-test.herokuapp.com/' + TOKEN)
+    updater.bot.setWebhook(URL + TOKEN)
     updater.idle()
 
 if __name__ == '__main__':
