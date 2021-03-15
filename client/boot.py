@@ -1,16 +1,23 @@
-import network
-import machine
 import time
+import micropython
+import machine
+import network
+import esp
+
+esp.osdebug(None)
+import gc
+gc.collect()
+
+ssid = '< put your ssid>'
+password = '< put your password>'
 
 led = machine.Pin(2,machine.Pin.OUT)
 
-sta_if = network.WLAN(network.STA_IF)
-ap_if = network.WLAN(network.AP_IF)
+station = network.WLAN(network.STA_IF)
+station.active(True)
+station.connect(ssid,password)
 
-sta_if.active(True)
-sta_if.connect('<put your ssid>','<put your password>')
-
-if sta_if.isconnected() == True:
+if station.isconnected() == True:
     for i in range(2):
         led.off()
         time.sleep(1)
