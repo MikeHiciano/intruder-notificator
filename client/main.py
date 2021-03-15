@@ -7,7 +7,7 @@ button = Pin(12,Pin.IN)
 SECURED_ALARM = False
 
 def sub_cb(topic, msg):
-    if msg == b'bruh':
+    if msg == b'on':
         led.value(1)
     elif msg == b'off':
         led.value(0)
