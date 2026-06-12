@@ -2,10 +2,13 @@ import logging
 import threading
 import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-import paho.mqtt.publish as publish
+from paho.mqtt import publish
 import paho.mqtt.client as mqtt
 import os
 import time
+import dotenv
+
+dotenv.load_dotenv()
 
 TOKEN = os.environ.get('TOKEN')
 PORT = int(os.environ.get('PORT', '8443'))
@@ -90,7 +93,7 @@ def bot_main():
     updater.start_webhook(listen="0.0.0.0",
                           port=int(PORT),
                           url_path=TOKEN)
-    updater.bot.setWebhook('https://intruder-notificator-test.herokuapp.com/' + TOKEN)
+    #updater.bot.setWebhook('https://intruder-notificator-test.herokuapp.com/' + TOKEN)
     updater.idle()
 
 if __name__ == '__main__':

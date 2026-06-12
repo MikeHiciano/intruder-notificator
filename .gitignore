@@ -2,3 +2,4 @@ env/
 credenciales.txt
 .pyc
 *.pem
+.env
